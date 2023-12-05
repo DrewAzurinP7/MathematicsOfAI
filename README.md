@@ -1,0 +1,2 @@
+# MathematicsOfAI
+MathematicsOfAI project
