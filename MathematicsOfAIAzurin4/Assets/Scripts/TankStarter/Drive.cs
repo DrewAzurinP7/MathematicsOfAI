@@ -1,33 +1,48 @@
 ﻿using UnityEngine;
-using System.Collections;
-using UnityEngine.UI;
 
 // A very simplistic car driving on the x-z plane.
 
-public class Drive : MonoBehaviour
+public class Drive : MonoBehaviour 
 {
     public float speed = 10.0f;
     public float rotationSpeed = 100.0f;
-
     public GameObject fuel;
 
-    void Start()
+    void Start() 
     {
 
     }
 
-    void CalculateDistance()
+    void CalculateAngle() 
     {
+
+        Vector3 tankForwardVector = this.transform.up;
+        Vector3 fuelVector = fuel.transform.position - this.transform.position;
+
+        float dot = tankForwardVector.x * fuelVector.x + tankForwardVector.y * fuelVector.y;
+        float angle = Mathf.Acos(dot / (tankForwardVector.magnitude * fuelVector.magnitude));
+
+        Debug.Log("Angle: " + angle * Mathf.Rad2Deg);
+        Debug.Log("Unity Angle: " + Vector3.Angle(tankForwardVector, fuelVector));
+
+        Debug.DrawRay(this.transform.position, tankForwardVector * 10.0f, Color.green, 2.0f);
+        Debug.DrawRay(this.transform.position, fuelVector, Color.red, 2.0f);
+    }
+
+    void CalculateDistance() 
+    {
+
         Vector3 tankPosition = this.transform.position;
         Vector3 fuelPosition = fuel.transform.position;
 
-        float distance = Mathf.Sqrt(Mathf.Pow(tankPosition.x - fuelPosition.x, 2) + Mathf.Pow(tankPosition.y - fuelPosition.y, 2));
-
+        float distance = Mathf.Sqrt(Mathf.Pow(tankPosition.x - fuelPosition.x, 2.0f) + Mathf.Pow(tankPosition.y - fuelPosition.y, 2.0f) + Mathf.Pow(tankPosition.z - fuelPosition.z, 2.0f));
         float unityDistance = Vector3.Distance(tankPosition, fuelPosition);
-            Debug.Log("Distance: " + distance);
+
+        Debug.Log("Distance: " + distance);
+        Debug.Log("Unity Distance: " + unityDistance);
     }
 
-    void Update()
+    void Update() 
     {
         // Get the horizontal and vertical axis.
         // By default they are mapped to the arrow keys.
@@ -45,9 +60,12 @@ public class Drive : MonoBehaviour
         // Rotate around our y-axis
         transform.Rotate(0, 0, -rotation);
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space)) 
         {
+
             CalculateDistance();
+            CalculateAngle();
         }
+
     }
 }
