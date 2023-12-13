@@ -27,6 +27,24 @@ public class Drive : MonoBehaviour
 
         Debug.DrawRay(this.transform.position, tankForwardVector * 10.0f, Color.green, 2.0f);
         Debug.DrawRay(this.transform.position, fuelVector, Color.red, 2.0f);
+
+        int clockwise = 1;
+        if (Cross(tankForwardVector, fuelVector).z < 0)
+            clockwise = -1;
+
+        float unityAngle = Vector3.SignedAngle(tankForwardVector, fuelVector, this.transform.forward);
+
+        this.transform.Rotate(0, 0, unityAngle);
+    }
+
+     Vector3 Cross(Vector3 v, Vector3 w)
+    {
+        float xMult = v.y * w.z - v.z * w.y;
+        float yMult = v.z * w.x - v.x * w.z;
+        float zMult = v.x * w.y - v.y * w.x;
+
+        Vector3 crossProd = new Vector3 (xMult, yMult, zMult);
+        return crossProd;
     }
 
     void CalculateDistance() 
