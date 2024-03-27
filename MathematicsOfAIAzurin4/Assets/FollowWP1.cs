@@ -57,8 +57,7 @@ public class FollowWP1 : MonoBehaviour
                 this.transform.position.y,
                 goal.position.z);
             Vector3 direction = lookAtGoal - this.transform.position;
-            this.transform.position = Quaternion.Slerp(this.transform.rotation,
-                Time.deltaTime * rotSpeed);
+            this.transform.rotation = Quaternion.Slerp(this.transform.rotation, Quaternion.LookRotation(direction), Time.deltaTime * rotSpeed);
 
             this.transform.Translate(0, 0, speed * Time.deltaTime);
         }
